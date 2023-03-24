@@ -11,18 +11,19 @@ Player::Player(std::string name)
     nameP=name;
 }
 
-int Player::SideCards_player()
-//prints the amount of cards player won and put in his side of the game.
-{
-    return 1;
-}
+//int Player::SideCards_player()
+//{
+//    return 1;
+//}
 
 int Player::stacksize() //prints the amount of cards left. should be 21 but can be less if a draw was played
 {
     return 1;
 }
 
-void Player::cardesTaken() // prints the amount of cards this player has won.
+int Player::cardesTaken() // prints the amount of cards this player has won.
+//prints the amount of cards player won and put in his side of the game.
+
 {
 
 }
