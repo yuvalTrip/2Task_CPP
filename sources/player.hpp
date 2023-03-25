@@ -6,15 +6,11 @@
 #define INC_2TASK_PLAYER_HPP
 
 
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
-
 #include <string>
 #include <stdio.h>
+#include "iostream"
 
 using namespace std;
-#include "iostream"
-#include "stdio.h"
 
 
 class Player{
@@ -26,14 +22,13 @@ public:
     Player(){};//empty constructor
     Player(std::string s);
 
-    std::string getPName(); // get the player name
+    string getPName(); // get the player name
 
     int stacksize(); //prints the amount of cards left. should be 21 but can be less if a draw was played
     int cardesTaken(); // prints the amount of cards this player has won.
 
 };
 
-#endif
 
 
 #endif //INC_2TASK_PLAYER_HPP

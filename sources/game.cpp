@@ -4,6 +4,7 @@
 
 #include "game.hpp"
 #include "player.hpp"
+#include "card.hpp"
 
 
 Game::Game(Player first, Player second)
@@ -11,7 +12,20 @@ Game::Game(Player first, Player second)
 {
     player1 = first;
     player2 = second;
+    card_* cards;//cardlist
 }
+
+void Game::initial_game()
+{// divided the cards randomly and equally between 2 players
+    for (int num = 1; num <= 13; num++) {
+        for (int shape = 0; shape < 4; shape++) {
+            card_::Shape cardShape = static_cast<card_::Shape>(shape);
+            card_ card(num, cardShape);
+           // cards.addCard(card);
+        }
+    }
+}
+
 void Game::playTurn()
 {
 
@@ -25,13 +39,16 @@ void Game::printLastTurn()
 }
 
 void Game::playAll()
+//players the game until the end
 {
 
-} //players the game until the end
+}
 
-void Game::printWiner(){
+void Game::printWiner()
+// prints the name of the winning player
+{
 
-} // prints the name of the winning player
+}
 
 void Game::printLog(){
 

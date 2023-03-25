@@ -2,11 +2,25 @@
 // Created by yuvaltrip on 3/23/23.
 //
 
-#ifndef INC_2TASK_CARD_CPP
-#define INC_2TASK_CARD_CPP
+#include "card.hpp"
+#include <string>
 
 
-class card_{
-
+card_::card_(int value_,Shape shape_)
+// constructor
+{
+    this->value=value_;// Number of the card (A,2,3,...,J,Q,K)
+    this->shape=shape_; // The shape written on the card (Hearts, Clubs, Spades, Diamonds)
 };
-#endif //INC_2TASK_CARD_CPP
+
+int card_::getCardValue()
+// return card value
+{
+    return value;
+}
+
+card_::Shape card_::getCardShape() const
+// return player shape
+{
+    return shape;
+}
