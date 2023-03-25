@@ -24,3 +24,4 @@ card_::Shape card_::getCardShape() const
 {
     return shape;
 }
+
