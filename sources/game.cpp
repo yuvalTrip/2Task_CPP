@@ -12,12 +12,12 @@ Game::Game(Player first, Player second)
 {
     player1 = first;
     player2 = second;
-
+    //last_turn_string="";
 }
 
 void Game::initial_game()
 {
-    Game::game_status::NOT_STARTED_YET;
+    //Game::game_status::NOT_STARTED_YET;
 // create list of 52 cards according to their shape and value
     for (int num = 1; num <= 13; num++) {
         for (int shape = 0; shape < 4; shape++) {
@@ -59,10 +59,16 @@ void Game::playTurn()
         // if there is a tie
         while (card_p1.getCardValue() == card_p2.getCardValue() && player1.numCardsLeft>0)
         {
+            draw_counter++;// increase number of draws (for printStats function)
             // for example: // Alice played 6 of Hearts Bob played 6 of Spades. Draw.
                             //Alice played 10 of Clubs Bob played 10 of Diamonds. draw.
-            last_turn_string=last_turn_string+player1.getPName()+" played "+card_p1.getCardValue()+" of "+card_p1.getCardShape()+" "+
-            player1.getPName()+" played "+card_p2.getCardValue()+" of "+card_p2.getCardShape()+". drow";
+            last_turn_string=last_turn_string+player1.getPName()
+                    +" played "+std::to_string(card_p1.getCardValue())
+                    +" of "+std::to_string(card_p1.getCardShape())
+                    +" "+player1.getPName()
+                    +" played "+std::to_string(card_p2.getCardValue())
+                    +" of "+std::to_string(card_p2.getCardShape())+
+                    ". drow";
             // Take one flip card
             card_ card_first_p1 = *player1.get_card();// player 1 put down card
             card_ card_first_p2 = *player2.get_card();// player 2 put down card
@@ -75,12 +81,18 @@ void Game::playTurn()
                 num_of_tie++;
             }
         }
-        last_turn_string=last_turn_string+player1.getPName()+" played "+card_p1.getCardValue()+" of "+card_p1.getCardShape()+" "+
-        player1.getPName()+" played "+card_p2.getCardValue()+" of "+card_p2.getCardShape()+".";
+        last_turn_string=last_turn_string
+                +player1.getPName()+
+                " played "+std::to_string(card_p1.getCardValue())
+                +" of "+std::to_string(card_p1.getCardShape())
+                +" "+player1.getPName()
+                +" played "+std::to_string(card_p2.getCardValue())
+                +" of "+std::to_string(card_p2.getCardShape())+".";
 
         // If this is the last card
         if (card_p1.getCardValue() == card_p2.getCardValue())
         {
+            draw_counter++;// increase number of draws (for printStats function)
             // each player take his card
             player1.cards_won+=num_of_tie;
             player2.cards_won+=num_of_tie;
@@ -196,7 +208,7 @@ void Game::printLastTurn()
 void Game::playAll()
 //players the game until the end
 {
-    while (player1.numCardsLeft>0))
+    while (player1.numCardsLeft>0)
     {
         playTurn();
     }
@@ -229,9 +241,26 @@ void Game::printLog()// prints all the turns played one line per turn (same form
 
 void Game::printStats()
 {
+     std::cout <<player1.getPName()+" : win rate- "+std::to_string(win_rate(player1))+"% cards won:"+ std::to_string(player1.cardesTaken())+" draw rate- "+std::to_string(draw_rate())+"% number of throws:"+std::to_string(draw_counter)<<endl;
+    std::cout <<player2.getPName()<<" : win rate- "+std::to_string(win_rate(player2))+"% cards won:"+std::to_string(player2.cardesTaken())+" draw rate- "+std::to_string(draw_rate())+ "% number of throws:"+std::to_string(draw_counter)<< endl;
 
 }// for each player prints basic statistics: win rate, game_cards won, <other stats you want to print>. Also print the draw rate and amount of draws that happand. (draw within a draw counts as 2 draws. )
 
+int Game::draw_rate()
+// Draw rate will be compute as the precentage of draws from all turns.
+{
+    double d_rate=(100*draw_counter)/turns_counter;
+//    std::cout << d_rate<<"%";;
+    return d_rate;
+}
+
+int Game::win_rate(Player player1)
+// Win rate will be compute as the precentage of wins from all turns.
+{
+    double w_rate=(100*player1.numOfWins)/turns_counter;
+    //std::cout << w_rate<<"%";;
+    return w_rate;
+}
 
 
 
