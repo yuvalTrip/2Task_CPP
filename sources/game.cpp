@@ -50,12 +50,19 @@ void Game::playTurn()
 {
     if (player1.numCardsLeft>0)
     {
+        last_turn_string="";
         card_ card_p1 = *player1.get_card();// player 1 put down card
         card_ card_p2 = *player2.get_card();// player 2 put down card
+        // Alice played 6 of Hearts Bob played 6 of Spades. Draw. Alice played 10 of Clubs Bob played 10 of Diamonds. draw. Alice played Jack of Clubs Bob played King of Diamonds. Bob wins.
+
         int num_of_tie=1; // number of card in case of several tie moves
         // if there is a tie
         while (card_p1.getCardValue() == card_p2.getCardValue() && player1.numCardsLeft>0)
         {
+            // for example: // Alice played 6 of Hearts Bob played 6 of Spades. Draw.
+                            //Alice played 10 of Clubs Bob played 10 of Diamonds. draw.
+            last_turn_string=last_turn_string+player1.getPName()+" played "+card_p1.getCardValue()+" of "+card_p1.getCardShape()+" "+
+            player1.getPName()+" played "+card_p2.getCardValue()+" of "+card_p2.getCardShape()+". drow";
             // Take one flip card
             card_ card_first_p1 = *player1.get_card();// player 1 put down card
             card_ card_first_p2 = *player2.get_card();// player 2 put down card
@@ -68,23 +75,36 @@ void Game::playTurn()
                 num_of_tie++;
             }
         }
+        last_turn_string=last_turn_string+player1.getPName()+" played "+card_p1.getCardValue()+" of "+card_p1.getCardShape()+" "+
+        player1.getPName()+" played "+card_p2.getCardValue()+" of "+card_p2.getCardShape()+".";
+
         // If this is the last card
         if (card_p1.getCardValue() == card_p2.getCardValue())
         {
             // each player take his card
             player1.cards_won+=num_of_tie;
             player2.cards_won+=num_of_tie;
+            last_turn_string=last_turn_string+ " drow.";
         }
         // if player 1 is won
         else if (card_p1.getCardValue() > card_p2.getCardValue()) {
             player1.cards_won+=2*num_of_tie;//won all cards of him and the other
             player1.numOfWins++;// update for stat
+            // To build the string of the last turn:
+            // For example: Alice played Jack of Clubs Bob played King of Diamonds. Bob wins.
+            last_turn_string=last_turn_string+" "+player1.getPName()+" wins.";
         } else //if (card_p1.getCardValue() < card_p2.getCardValue())
             // if player 2 is won
         {
             player2.cards_won+=2*num_of_tie;//won all cards of him and the other
             player2.numOfWins++;// update for stat
+            // To build the string of the last turn:
+            // For example: Alice played Jack of Clubs Bob played King of Diamonds. Bob wins.
+            last_turn_string=last_turn_string+" "+player2.getPName()+" wins.";
+
         }
+
+        log_print=log_print+last_turn_string+ "\n"; // Add the last turn to the long string for the print Log
     }
 
 
@@ -170,10 +190,7 @@ void Game::printLastTurn()
 // Alice played Queen of Hearts Bob played 5 of Spades. Alice wins.
 // Alice played 6 of Hearts Bob played 6 of Spades. Draw. Alice played 10 of Clubs Bob played 10 of Diamonds. draw. Alice played Jack of Clubs Bob played King of Diamonds. Bob wins.
 {
-    cout << << endl;
-    std::cout << player1.getPName() << " played" <<"  "<<" of " << " " << ".";
-    std::cout << player2.getPName() << " played" <<"  "<<" of " << " " << ".";;
-    printWiner();
+    cout << last_turn_string << endl;
 }
 
 void Game::playAll()
@@ -204,9 +221,11 @@ void Game::printWiner()
 
 }
 
-void Game::printLog(){
+void Game::printLog()// prints all the turns played one line per turn (same format as game.printLastTurn())
+{
+    std::cout << log_print << endl;// Print the string we concat during "PlayTurn" function
 
-} // prints all the turns played one line per turn (same format as game.printLastTurn())
+}
 
 void Game::printStats()
 {

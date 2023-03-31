@@ -43,7 +43,7 @@ public:
     int size_game_card=0;//the index of card in the start when we put game_cards in game_cards last (in initialization game)
     card_* game_cards[CARD_CAPACITY];//all the cards in the game
     String::last_turn_string="";//define empty string that will save to us the information about the last turn (to thr function printLastTurn)
-
+    String::log_print=""; // I will define one long string and every turn I will concat the 'last_turn_string' such that each line will be the 'last turn'
 };
 
 #endif //INC_2TASK_GAME_HPP
