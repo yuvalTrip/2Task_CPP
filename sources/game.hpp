@@ -42,6 +42,7 @@ public:
     // Alice played 6 of Hearts Bob played 6 of Spades. Draw. Alice played 10 of Clubs Bob played 10 of Diamonds. draw. Alice played Jack of Clubs Bob played King of Diamonds. Bob wins.
     int size_game_card=0;//the index of card in the start when we put game_cards in game_cards last (in initialization game)
     card_* game_cards[CARD_CAPACITY];//all the cards in the game
+    String::last_turn_string="";//define empty string that will save to us the information about the last turn (to thr function printLastTurn)
 
 };
 

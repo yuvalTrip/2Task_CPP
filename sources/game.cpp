@@ -49,78 +49,120 @@ void Game::divide_cards()
 void Game::playTurn()
 {
     if (player1.numCardsLeft>0)
-    //player 1 and player 2 have the same number of cards , so if it will be bigger than 0 we will do
-        //as follow:
     {
-        if (Game::game_status==P1LOOSE || Game::game_status==P1WON || Game::game_status==NOT_STARTED_YET)
+        card_ card_p1 = *player1.get_card();// player 1 put down card
+        card_ card_p2 = *player2.get_card();// player 2 put down card
+        int num_of_tie=1; // number of card in case of several tie moves
+        // if there is a tie
+        while (card_p1.getCardValue() == card_p2.getCardValue() && player1.numCardsLeft>0)
         {
-            card_ card_p1 = *player1.get_card();// player 1 put down card
-            card_ card_p2 = *player2.get_card();// player 2 put down card
-            // if player 1 is won
-            if (card_p1.getCardValue() > card_p2.getCardValue()) {
-                player1.cards_won+=2;//won both cards
-                player1.numOfWins++;// update for stat
-                game_status::P1WON;
-            } else if (card_p1.getCardValue() < card_p2.getCardValue())
-                // if player 2 is won
+            // Take one flip card
+            card_ card_first_p1 = *player1.get_card();// player 1 put down card
+            card_ card_first_p2 = *player2.get_card();// player 2 put down card
+            num_of_tie++;
+            // Take one open card
+            if (player1.numCardsLeft>0)
             {
-                player2.cards_won+=2;//won both cards
-                player2.numOfWins++;// update for stat
-                game_status::P1LOOSE;
-            }
-                // if there is a tie
-            else {
-                game_status::TIE;
-                // Add 2 card to the cardsTie list of both players
-                player1.cardsTie[player1.index_tie]=card_p1;
-                player2.cardsTie[player2.index_tie]=card_p1;
-                player1.cardsTie[player1.index_tie++]=card_p2;
-                player2.cardsTie[player2.index_tie++]=card_p2;
-
+                card_p1 = *player1.get_card();// player 1 put down card
+                card_p2 = *player2.get_card();// player 2 put down card
+                num_of_tie++;
             }
         }
-        else// If the stat is tie
+        // If this is the last card
+        if (card_p1.getCardValue() == card_p2.getCardValue())
         {
-            //we will get one more card for each player
-            //and send it to cardsTie
-            card_ card_temp1= *player1.get_card();// player 1 put down card
-            player1.cardsTie[player1.index_tie++]=card_temp1;
-            card_ card_temp2 = *player2.get_card();// player 2 put down card
-            player2.cardsTie[player2.index_tie++]=card_temp2;
-            //we will get one more card for both players and check which is the winner
-            // This is the last card
-            card_ card_last1= *player1.get_card();// player 1 put down the last card
-            //player1.cardsTie[player1.index_tie++]=card_last1;
-            card_ card_last2= *player2.get_card();// player 2 put down the last card
-            //player2.cardsTie[player2.index_tie++]=card_last2;
-            // Now we will check the values
-            if (card_last1.getCardValue() > card_last2.getCardValue()) {
-                player1.cards_won+=2;//won both cards
-                player1.numOfWins++;// update for stat
-                game_status::P1WON;
-            } else if (card_last1.getCardValue() < card_last2.getCardValue())
-                // if player 2 is won
-            {
-                player2.cards_won+=2;//won both cards
-                player2.numOfWins++;// update for stat
-                game_status::P1LOOSE;
-            }
-                // if there is a tie
-            else {
-                game_status::TIE;
-                // Add 2 card to the cardsTie list of both players
-                player1.cardsTie[player1.index_tie]=card_last1;
-                player2.cardsTie[player2.index_tie]=card_last1;
-                player1.cardsTie[player1.index_tie++]=card_last2;
-                player2.cardsTie[player2.index_tie++]=card_last2;
-
-            }
-
-
+            // each player take his card
+            player1.cards_won+=num_of_tie;
+            player2.cards_won+=num_of_tie;
         }
-
-
+        // if player 1 is won
+        else if (card_p1.getCardValue() > card_p2.getCardValue()) {
+            player1.cards_won+=2*num_of_tie;//won all cards of him and the other
+            player1.numOfWins++;// update for stat
+        } else //if (card_p1.getCardValue() < card_p2.getCardValue())
+            // if player 2 is won
+        {
+            player2.cards_won+=2*num_of_tie;//won all cards of him and the other
+            player2.numOfWins++;// update for stat
+        }
     }
+
+
+
+
+//    if (player1.numCardsLeft>0)
+//    //player 1 and player 2 have the same number of cards , so if it will be bigger than 0 we will do
+//        //as follow:
+//    {
+//        if (Game::game_status==P1LOOSE || Game::game_status==P1WON || Game::game_status==NOT_STARTED_YET)
+//        {
+//            card_ card_p1 = *player1.get_card();// player 1 put down card
+//            card_ card_p2 = *player2.get_card();// player 2 put down card
+//            // if player 1 is won
+//            if (card_p1.getCardValue() > card_p2.getCardValue()) {
+//                player1.cards_won+=2;//won both cards
+//                player1.numOfWins++;// update for stat
+//                game_status::P1WON;
+//            } else if (card_p1.getCardValue() < card_p2.getCardValue())
+//                // if player 2 is won
+//            {
+//                player2.cards_won+=2;//won both cards
+//                player2.numOfWins++;// update for stat
+//                game_status::P1LOOSE;
+//            }
+//                // if there is a tie
+//            else {
+//                game_status::TIE;
+//                // Add 2 card to the cardsTie list of both players
+//                player1.cardsTie[player1.index_tie]=card_p1;
+//                player2.cardsTie[player2.index_tie]=card_p1;
+//                player1.cardsTie[player1.index_tie++]=card_p2;
+//                player2.cardsTie[player2.index_tie++]=card_p2;
+//
+//            }
+//        }
+//        else// If the stat is tie
+//        {
+//            //we will get one more card for each player
+//            //and send it to cardsTie
+//            card_ card_temp1= *player1.get_card();// player 1 put down card
+//            player1.cardsTie[player1.index_tie++]=card_temp1;
+//            card_ card_temp2 = *player2.get_card();// player 2 put down card
+//            player2.cardsTie[player2.index_tie++]=card_temp2;
+//            //we will get one more card for both players and check which is the winner
+//            // This is the last card
+//            card_ card_last1= *player1.get_card();// player 1 put down the last card
+//            //player1.cardsTie[player1.index_tie++]=card_last1;
+//            card_ card_last2= *player2.get_card();// player 2 put down the last card
+//            //player2.cardsTie[player2.index_tie++]=card_last2;
+//            // Now we will check the values
+//            if (card_last1.getCardValue() > card_last2.getCardValue()) {
+//                player1.cards_won+=2;//won both cards
+//                player1.numOfWins++;// update for stat
+//                game_status::P1WON;
+//            } else if (card_last1.getCardValue() < card_last2.getCardValue())
+//                // if player 2 is won
+//            {
+//                player2.cards_won+=2;//won both cards
+//                player2.numOfWins++;// update for stat
+//                game_status::P1LOOSE;
+//            }
+//                // if there is a tie
+//            else {
+//                game_status::TIE;
+//                // Add 2 card to the cardsTie list of both players
+//                player1.cardsTie[player1.index_tie]=card_last1;
+//                player2.cardsTie[player2.index_tie]=card_last1;
+//                player1.cardsTie[player1.index_tie++]=card_last2;
+//                player2.cardsTie[player2.index_tie++]=card_last2;
+//
+//            }
+//
+//
+//        }
+//
+//
+//    }
 
 }
 void Game::printLastTurn()
@@ -128,18 +170,37 @@ void Game::printLastTurn()
 // Alice played Queen of Hearts Bob played 5 of Spades. Alice wins.
 // Alice played 6 of Hearts Bob played 6 of Spades. Draw. Alice played 10 of Clubs Bob played 10 of Diamonds. draw. Alice played Jack of Clubs Bob played King of Diamonds. Bob wins.
 {
-
+    cout << << endl;
+    std::cout << player1.getPName() << " played" <<"  "<<" of " << " " << ".";
+    std::cout << player2.getPName() << " played" <<"  "<<" of " << " " << ".";;
+    printWiner();
 }
 
 void Game::playAll()
 //players the game until the end
 {
+    while (player1.numCardsLeft>0))
+    {
+        playTurn();
+    }
 
 }
 
 void Game::printWiner()
 // prints the name of the winning player
 {
+    if (player1.cards_won>player2.cards_won)
+    {// Player 1 won
+        std::cout << player1.getPName() << " won"<< endl;;
+    }
+    else if(player2.cards_won>player1.cards_won)
+    {// Player 2 won
+        std::cout << player2.getPName() << " won"<< endl;;
+    }
+    else
+    {// Tie
+        std::cout << " It is a tie"<< endl;;
+    }
 
 }
 
@@ -147,7 +208,9 @@ void Game::printLog(){
 
 } // prints all the turns played one line per turn (same format as game.printLastTurn())
 
-void Game::printStats(){
+void Game::printStats()
+{
+
 }// for each player prints basic statistics: win rate, game_cards won, <other stats you want to print>. Also print the draw rate and amount of draws that happand. (draw within a draw counts as 2 draws. )
 
 
