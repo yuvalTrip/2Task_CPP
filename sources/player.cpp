@@ -29,10 +29,14 @@ int Player::cardesTaken() // return the amount of game_cards this player has won
     return cards_won;
 }
 
-card_* Player::get_card()
+card_ Player::get_card()
 // Get card from the player card list (when it is player turn)
 {
-        numCardsLeft--;// for example in the start this number is 26 (so we will take the last element in index 25)
-        return (cardsLeft[numCardsLeft]);
+    numCardsLeft--;// for example in the start this number is 26 (so we will take the last element in index 25)
+        //return (cardsLeft.pop_back());
+        //return (cardsLeft[numCardsLeft]);
+    card_ last_card = cardsLeft.back();// Get a reference to the last element in the list and store it in the last_card variable
+    cardsLeft.pop_back();// Removes the last element from cardsLeft
+    return last_card;// Returns a pointer to the removed element.
 }
 

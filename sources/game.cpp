@@ -35,24 +35,29 @@ void Game::divide_cards()
     // Randomize the order of the game_cards
     std::random_device rd;
     std::mt19937 g(rd());
-    std::shuffle(game_cards, game_cards + CARD_CAPACITY, g);
+    std::shuffle(game_cards.begin(), game_cards.end(), g);
     // Divide the game cards between 2 players
     for (int i=0;i<26;i++)
     {
-        player1.cardsLeft[i] = game_cards[i];
+        player1.cardsLeft.push_back(game_cards.back()); // Insert the lastcard from game_cards list to the player1.cardsLeft
+        game_cards.pop_back();// Removes the last element from game_cards
+        i++;
     }
     for(int i=26; i<52;i++)
     {
-        player2.cardsLeft[i] = game_cards[i];
+        player2.cardsLeft.push_back(game_cards.back()); // Insert the lastcard from game_cards list to the player2.cardsLeft
+        game_cards.pop_back();// Removes the last element from game_cards
+        i++;
     }
 }
 void Game::playTurn()
 {
+    turns_counter++;
     if (player1.numCardsLeft>0)
     {
         last_turn_string="";
-        card_ card_p1 = *player1.get_card();// player 1 put down card
-        card_ card_p2 = *player2.get_card();// player 2 put down card
+        card_ card_p1 = player1.get_card();// player 1 put down card
+        card_ card_p2 = player2.get_card();// player 2 put down card
         // Alice played 6 of Hearts Bob played 6 of Spades. Draw. Alice played 10 of Clubs Bob played 10 of Diamonds. draw. Alice played Jack of Clubs Bob played King of Diamonds. Bob wins.
 
         int num_of_tie=1; // number of card in case of several tie moves
@@ -70,14 +75,14 @@ void Game::playTurn()
                     +" of "+std::to_string(card_p2.getCardShape())+
                     ". drow";
             // Take one flip card
-            card_ card_first_p1 = *player1.get_card();// player 1 put down card
-            card_ card_first_p2 = *player2.get_card();// player 2 put down card
+            card_ card_first_p1 = player1.get_card();// player 1 put down card
+            card_ card_first_p2 = player2.get_card();// player 2 put down card
             num_of_tie++;
             // Take one open card
             if (player1.numCardsLeft>0)
             {
-                card_p1 = *player1.get_card();// player 1 put down card
-                card_p2 = *player2.get_card();// player 2 put down card
+                card_p1 = player1.get_card();// player 1 put down card
+                card_p2 = player2.get_card();// player 2 put down card
                 num_of_tie++;
             }
         }
