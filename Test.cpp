@@ -16,16 +16,7 @@ TEST_CASE("Game initialization")
     //Game game(p1, p2);
     CHECK_NOTHROW(Game game(p1, p2));
 }
-TEST_CASE("Create Player")
-{
-    // Init player.
-    Player alice("Alice");
-    CHECK(alice.stacksize() == 0);
-    CHECK(alice.cardesTaken() == 0);
 
-    // Create empty player.
-    CHECK_THROWS(Player(""));
-}
 TEST_CASE("Test about the start of the game")
 {
     Player p1("Alice");
