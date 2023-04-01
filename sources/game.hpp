@@ -27,7 +27,7 @@ private:
 
 public:
     Game(){}; //empty constructor
-    Game(Player p, Player t);
+    Game(Player& first, Player& second);
     //enum game_status { P1WON, P1LOOSE, TIE, NOT_STARTED_YET };// The status in specific turn
     void initial_game(); // create list of 52 cards according to their shape and value
     void divide_cards();// divided the game_cards randomly and equally between 2 players

@@ -23,7 +23,7 @@ public:
     Player(){};//empty constructor
     Player(std::string s);
     string getPName(); // get the player name
-    int numCardsLeft=26;// Number of the players card left
+    //int numCardsLeft=26;// Number of the players card left
     //card_* cardsLeft[26];// List of the players card left
 
     std::list<card_> cardsLeft;// List of the players card left
