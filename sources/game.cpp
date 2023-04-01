@@ -10,8 +10,8 @@
 Game::Game(Player& first, Player& second)
 //constructor
 {
-    player1 = first;
-    player2 = second;
+    player1 = &first;
+    player2 = &second;
     //last_turn_string="";
     initial_game();
     divide_cards();
@@ -42,52 +42,52 @@ void Game::divide_cards()
     // Divide the game cards between 2 players
     for (int i=0;i<26;i++)
     {
-        player1.cardsLeft.push_back(game_cards.back()); // Insert the lastcard from game_cards list to the player1.cardsLeft
+        player1->push_card(game_cards.back()); // Insert the last card from game_cards list to the player1.cardsLeft
         game_cards.pop_back();// Removes the last element from game_cards
-        player2.cardsLeft.push_back(game_cards.back()); // Insert the lastcard from game_cards list to the player2.cardsLeft
+        player2->push_card(game_cards.back()); // Insert the last card from game_cards list to the player2.cardsLeft
         game_cards.pop_back();// Removes the last element from game_cards
     }
 }
 void Game::playTurn()
 {
     turns_counter++;// For prints
-    if (player1.cardsLeft.size()>0)//numCardsLeft>0)
+    if (player1->get_cardsLeft_size()>0)//numCardsLeft>0)
     {
         last_turn_string="";
-        card_ card_p1 = player1.get_card();// player 1 put down card
-        card_ card_p2 = player2.get_card();// player 2 put down card
+        card_ card_p1 = player1->get_card();// player 1 put down card
+        card_ card_p2 = player2->get_card();// player 2 put down card
         // Alice played 6 of Hearts Bob played 6 of Spades. Draw. Alice played 10 of Clubs Bob played 10 of Diamonds. draw. Alice played Jack of Clubs Bob played King of Diamonds. Bob wins.
         int num_of_tie=1; // number of card in case of several tie moves
         // if there is a tie
-        while (card_p1.getCardValue() == card_p2.getCardValue() && player1.cardsLeft.size()>0)//numCardsLeft>0)
+        while (card_p1.getCardValue() == card_p2.getCardValue() && player1->get_cardsLeft_size()>0)//numCardsLeft>0)
         {
             draw_counter++;// increase number of draws (for printStats function)
             // for example: // Alice played 6 of Hearts Bob played 6 of Spades. Draw.
                             //Alice played 10 of Clubs Bob played 10 of Diamonds. draw.
-            last_turn_string=last_turn_string+player1.getPName()
+            last_turn_string=last_turn_string+player1->getPName()
                     +" played "+std::to_string(card_p1.getCardValue())
                     +" of "+card_p1.getCardShape()
-                    +" "+player2.getPName()
+                    +" "+player2->getPName()
                     +" played "+card_p2.printCardValue()
                     +" of "+card_p2.getCardShape()+
                     ". drow.";
             // Take one flip card
-            card_ card_first_p1 = player1.get_card();// player 1 put down card
-            card_ card_first_p2 = player2.get_card();// player 2 put down card
+            card_ card_first_p1 = player1->get_card();// player 1 put down card
+            card_ card_first_p2 = player2->get_card();// player 2 put down card
             num_of_tie++;
             // Take one open card
-            if(player1.cardsLeft.size()>0)// If there are still left cards
+            if(player1->get_cardsLeft_size()>0)// If there are still left cards
             {
-                card_p1 = player1.get_card();// player 1 put down card
-                card_p2 = player2.get_card();// player 2 put down card
+                card_p1 = player1->get_card();// player 1 put down card
+                card_p2 = player2->get_card();// player 2 put down card
                 num_of_tie++;
             }
         }
         last_turn_string=last_turn_string
-                +player1.getPName()+
+                +player1->getPName()+
                 " played "+std::to_string(card_p1.getCardValue())
                 +" of "+card_p1.getCardShape()
-                +" "+player2.getPName()
+                +" "+player2->getPName()
                 +" played "+card_p2.printCardValue()
                 +" of "+card_p2.getCardShape()+".";
 
@@ -96,28 +96,28 @@ void Game::playTurn()
         {
             draw_counter++;// increase number of draws (for printStats function)
             // each player take his card
-            player1.cards_won+=num_of_tie;
-            player2.cards_won+=num_of_tie;
+            player1->increase_cards_won(num_of_tie);
+            player2->increase_cards_won(num_of_tie);
             last_turn_string=last_turn_string+ " drow.";
         }
         // if player 1 is won
         else if (card_p1.getCardValue() > card_p2.getCardValue()) {
-            player1.cards_won+=2*num_of_tie;//won all cards of him and the other
-            player1.numOfWins++;// update for stat
-            cout <<"player1.cards_won:"<<player1.cards_won<<endl;
+            player1->increase_cards_won(2*num_of_tie);//won all cards of him and the other
+            player1->increase_num_of_wins();// update for stat
+            //cout <<"player1.cards_won:"<<player1->cards_won<<endl;
             // To build the string of the last turn:
             // For example: Alice played Jack of Clubs Bob played King of Diamonds. Bob wins.
-            last_turn_string=last_turn_string+" "+player1.getPName()+" wins.";
+            last_turn_string=last_turn_string+" "+player1->getPName()+" wins.";
         } else //if (card_p1.getCardValue() < card_p2.getCardValue())
             // if player 2 is won
         {
-            player2.cards_won+=2*num_of_tie;//won all cards of him and the other
-            player2.numOfWins++;// update for stat
-            cout <<"player2.cards_won:"<<player2.cards_won<<endl;
+            player2->increase_cards_won(2*num_of_tie);//won all cards of him and the other
+            player2->increase_num_of_wins();// update for stat
+            //cout <<"player2.cards_won:"<<player2->cards_won<<endl;
 
             // To build the string of the last turn:
             // For example: Alice played Jack of Clubs Bob played King of Diamonds. Bob wins.
-            last_turn_string=last_turn_string+" "+player2.getPName()+" wins.";
+            last_turn_string=last_turn_string+" "+player2->getPName()+" wins.";
 
         }
 
@@ -136,7 +136,7 @@ void Game::printLastTurn()
 void Game::playAll()
 //players the game until the end
 {
-    while (player1.cardsLeft.size()>0)//numCardsLeft>0)
+    while (player1->get_cardsLeft_size()>0)//numCardsLeft>0)
     {
         playTurn();
     }
@@ -146,13 +146,13 @@ void Game::playAll()
 void Game::printWiner()
 // prints the name of the winning player
 {
-    if (player1.cards_won>player2.cards_won)
+    if (player1->get_how_many_cards_won()>player2->get_how_many_cards_won())
     {// Player 1 won
-        std::cout << player1.getPName() << " won"<< endl;;
+        std::cout << player1->getPName() << " won"<< endl;;
     }
-    else if(player2.cards_won>player1.cards_won)
+    else if(player2->get_how_many_cards_won()>player1->get_how_many_cards_won())
     {// Player 2 won
-        std::cout << player2.getPName() << " won"<< endl;;
+        std::cout << player2->getPName() << " won"<< endl;;
     }
     else
     {// Tie
@@ -169,8 +169,8 @@ void Game::printLog()// prints all the turns played one line per turn (same form
 
 void Game::printStats()
 {
-    std::cout <<player1.getPName()+" : win rate- "+std::to_string(win_rate(player1))+"% cards won:"+ std::to_string(player1.cardesTaken())+" draw rate- "+std::to_string(draw_rate())+"% number of draws:"+std::to_string(draw_counter)<<endl;
-    std::cout <<player2.getPName()<<" : win rate- "+std::to_string(win_rate(player2))+"% cards won:"+std::to_string(player2.cardesTaken())+" draw rate- "+std::to_string(draw_rate())+ "% number of draws:"+std::to_string(draw_counter)<< endl;
+    std::cout <<player1->getPName()+" : win rate- "+std::to_string(win_rate(*player1))+"% cards won:"+ std::to_string(player1->cardesTaken())+" draw rate- "+std::to_string(draw_rate())+"% number of draws:"+std::to_string(draw_counter)<<endl;
+    std::cout <<player2->getPName()<<" : win rate- "+std::to_string(win_rate(*player2))+"% cards won:"+std::to_string(player2->cardesTaken())+" draw rate- "+std::to_string(draw_rate())+ "% number of draws:"+std::to_string(draw_counter)<< endl;
 
 }// for each player prints basic statistics: win rate, game_cards won, <other stats you want to print>. Also print the draw rate and amount of draws that happand. (draw within a draw counts as 2 draws. )
 
@@ -183,10 +183,10 @@ int Game::draw_rate()
 
 }
 
-int Game::win_rate(Player player1)
+int Game::win_rate(Player& player)
 // Win rate will be compute as the precentage of wins from all turns.
 {
-    double w_rate=(100*player1.numOfWins)/turns_counter;
+    double w_rate=(100*player.get_num_of_wins())/turns_counter;
     return w_rate;
 }
 

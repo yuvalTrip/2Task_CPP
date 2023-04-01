@@ -12,7 +12,7 @@ class card_{
 
 public:
     enum Shape { CLUBS, DIAMONDS, HEARTS, SPADES };// The shape written on the card (Hearts, Clubs, Spades, Diamonds)
-    card_(){};//empty constructor
+    card_();
     card_(int value_,Shape shape_);
     int getCardValue(); // get the card value (as numbers 1,2,..,13)
     std::string printCardValue(); // get the card value (as strings: Ace,King,Queen,Jack.)
