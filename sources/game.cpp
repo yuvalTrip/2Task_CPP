@@ -12,7 +12,6 @@ Game::Game(Player& first, Player& second)
 {
     player1 = &first;
     player2 = &second;
-    //last_turn_string="";
     initial_game();
     divide_cards();
 }
@@ -50,6 +49,7 @@ void Game::divide_cards()
 }
 void Game::playTurn()
 {
+    if (player1==player2){throw std::runtime_error("This is the same player!");}
     turns_counter++;// For prints
     if (player1->get_cardsLeft_size()>0)//numCardsLeft>0)
     {
@@ -122,6 +122,10 @@ void Game::playTurn()
         }
 
         log_print=log_print+last_turn_string+ "\n"; // Add the last turn to the long string for the print Log
+    }
+    else
+    {
+        throw std::runtime_error("Game is over!");
     }
 
 }

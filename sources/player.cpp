@@ -21,7 +21,7 @@ string Player::getPName()
 int Player::stacksize() //return the amount of game_cards left. should be 21 but can be less if a draw was played
 {
     //return numCardsLeft;
-    return cardsLeft.size();
+    return (cardsLeft.size());
 
 }
 
