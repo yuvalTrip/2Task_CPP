@@ -4,6 +4,7 @@
 #include "sources/game.hpp"
 #include "sources/card.hpp"
 using namespace std;
+using namespace ariel;
 
 TEST_CASE("The amount of cards before starting a game")
 {
@@ -51,6 +52,7 @@ TEST_CASE("Throwing errors from the functions")
     CHECK_NOTHROW(game.printLog());
     CHECK_NOTHROW(game.printStats());
     CHECK_NOTHROW(game.printWiner());
+
 }
 
 TEST_CASE("Activating another turn after the game is over")
@@ -95,12 +97,11 @@ TEST_CASE("The game ends after at most 26 turns")
     Game game(p1, p2);
     bool maxTurns = 26;
 
-    for (int i = 0 ; i <= 26 && p1.stacksize()>0; i++ )
+    for (int i = 0 ; i < 26 && p1.stacksize()>0; i++ )
     {
-        //cout<<"p1.stacksize()="<<p1.stacksize()<<"i="<<i<<endl;
         game.playTurn();
     }
-    CHECK(maxTurns == 1);
+    CHECK(maxTurns == 26);
     CHECK(p1.stacksize() == 0);
     CHECK(p2.stacksize() == 0);
 }
