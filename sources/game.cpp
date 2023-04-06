@@ -65,7 +65,7 @@ void Game::playTurn()
             // for example: // Alice played 6 of Hearts Bob played 6 of Spades. Draw.
                             //Alice played 10 of Clubs Bob played 10 of Diamonds. draw.
             last_turn_string=last_turn_string+player1->getPName()
-                    +" played "+std::to_string(card_p1.getCardValue())
+                    +" played "+card_p1.printCardValue()
                     +" of "+card_p1.getCardShape()
                     +" "+player2->getPName()
                     +" played "+card_p2.printCardValue()
@@ -85,7 +85,7 @@ void Game::playTurn()
         }
         last_turn_string=last_turn_string
                 +player1->getPName()+
-                " played "+std::to_string(card_p1.getCardValue())
+                " played "+card_p1.printCardValue()
                 +" of "+card_p1.getCardShape()
                 +" "+player2->getPName()
                 +" played "+card_p2.printCardValue()
@@ -101,7 +101,10 @@ void Game::playTurn()
             last_turn_string=last_turn_string+ " drow.";
         }
         // if player 1 is won
-        else if (card_p1.getCardValue() > card_p2.getCardValue()) {
+        else if ((card_p1.getCardValue() > card_p2.getCardValue() &&  card_p2.getCardValue()!=1 )//for example: (4,3)
+        || (card_p1.getCardValue() ==1 && card_p2.getCardValue()!=2) //for example: (1,4)
+        || (card_p1.getCardValue() ==2 && card_p2.getCardValue()==1)) // In case of: (2,1)
+        {
             player1->increase_cards_won(2*num_of_tie);//won all cards of him and the other
             player1->increase_num_of_wins();// update for stat
             //cout <<"player1.cards_won:"<<player1->cards_won<<endl;
@@ -160,7 +163,8 @@ void Game::printWiner()
     }
     else
     {// Tie
-        std::cout << " It is a tie"<< endl;;
+        std::cout << "This is a tie"<< endl;
+        throw std::runtime_error("This is a tie!");
     }
 
 }
